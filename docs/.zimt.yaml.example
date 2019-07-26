@@ -4,3 +4,4 @@ mqtt:
   base-topic: zigbee2mqtt
   user: <mqtt-user>
   password: <mqtt-password>
+  client-id: zimt

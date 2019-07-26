@@ -11,6 +11,7 @@ type MqttConfig struct {
 	BaseTopic string
 	User      string
 	Password  string
+	ClientID  string
 }
 
 // NewMqttConfig returns new value of mqtt config
@@ -21,6 +22,7 @@ func NewMqttConfig() MqttConfig {
 		BaseTopic: viper.GetString("mqtt.base-topic"),
 		User:      viper.GetString("mqtt.user"),
 		Password:  viper.GetString("mqtt.password"),
+		ClientID:  viper.GetString("mqtt.client-id"),
 	}
 }
 
@@ -28,4 +30,5 @@ func init() {
 	viper.SetDefault("mqtt.broker", "localhost")
 	viper.SetDefault("mqtt.port", 1883)
 	viper.SetDefault("mqtt.base-topic", "zigbee2mqtt")
+	viper.SetDefault("mqtt.client-id", "zimt")
 }
