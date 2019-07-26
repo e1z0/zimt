@@ -1,6 +1,7 @@
 CMD_NAME ?= "zimt"
 BIN_PATH ?= "./bin/${CMD_NAME}"
 PKGS = $(shell go list ./...)
+TEST_PKGS=$(shell go list ./pkg/... 2> /dev/null)
 
 build:
 	@go mod tidy
@@ -22,4 +23,8 @@ lint:
 	@echo ">> Linting codebase..."
 	@golint $(PKGS)
 
-.PHONY: build
+test:
+	@echo ">> Running tests..."
+	@go test -v ${TEST_PKGS}
+
+.PHONY: build test
