@@ -1,0 +1,7 @@
+mqtt:
+  broker: localhost
+  port: 1883
+  base-topic: zigbee2mqtt
+  user: <mqtt-user>
+  password: <mqtt-password>
+  client-id: zimt
