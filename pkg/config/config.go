@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
@@ -32,19 +31,18 @@ func Load(cfgFile string) {
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	viper.AutomaticEnv() // read in environment variables that match
 
+	err := viper.ReadInConfig()
+
 	if viper.GetBool("verbose") {
 		fmt.Printf("using config file: %q\n", viper.ConfigFileUsed())
 	}
 
-	if err := viper.ReadInConfig(); err != nil {
+	if err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			fmt.Println("warning: config file is not found, using defaults")
-			// Config file not found; ignore error if desired
 		} else {
-			log.Fatalf("error while reading config file: %s", err)
-			// fmt.Fat
-			// panic(fmt.Errorf("Fatal error config file: %s \n", err))
-			// Config file was found but another error was produced
+			fmt.Printf("error %s", strings.ToLower(err.Error()))
+			os.Exit(1)
 		}
 	}
 }
