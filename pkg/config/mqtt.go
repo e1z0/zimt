@@ -18,7 +18,7 @@ type MqttConfig struct {
 
 // Print prints mqtt config to standard output
 func (mc MqttConfig) Print() {
-	structs.Report(&mc, "viper")
+	structs.Print(&mc, "viper")
 }
 
 // NewMqttConfig returns new value of mqtt config

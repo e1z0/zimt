@@ -18,7 +18,7 @@ type BridgeConfig struct {
 
 // Print prints bridge config to standard output
 func (bc BridgeConfig) Print() {
-	structs.Report(&bc, "json")
+	structs.Print(&bc, "json")
 }
 
 // GetBridgeConfig subscribes and returns message  from `#/bridge/config` topic

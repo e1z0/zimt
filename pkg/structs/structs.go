@@ -74,8 +74,8 @@ func UnmarshalViper(arg interface{}) {
 	}
 }
 
-// Report prints the config fields and values to the standard output
-func Report(arg interface{}, tag string) {
+// Print prints the config fields and values to the standard output
+func Print(arg interface{}, tag string) {
 	fields := ExtractFields(arg)
 
 	if len(fields) == 0 {
