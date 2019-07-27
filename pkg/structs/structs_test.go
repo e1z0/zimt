@@ -4,31 +4,14 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/radiohive/zimt/pkg/config"
+	"github.com/spf13/viper"
 )
 
-func TestUnmarshalViperWithDefaultConfig(t *testing.T) {
-	config.Load("../../test/config.yaml")
+const ConfigFile = "../../test/config.yaml"
 
-	var actual MqttConfig
-	unmarshal(&actual)
-
-	expected := MqttConfig{
-		Broker:    "1.2.3.4",
-		Port:      1234,
-		BaseTopic: "my-topic",
-		User:      "my-user",
-		Password:  "my-password",
-		ClientID:  "my-client",
-	}
-
-	if !reflect.DeepEqual(expected, actual) {
-		t.Errorf("Expected %+v, got %+v", expected, actual)
-	}
-}
-
-func TestUnmarshalViperWithNotTaggedFields(t *testing.T) {
-	config.Load("../../test/config.yaml")
+func TestUnmarshalViper(t *testing.T) {
+	viper.SetConfigFile(ConfigFile)
+	viper.ReadInConfig()
 
 	type mycfg struct {
 		Broker    string `viper:"mqtt.broker"`
@@ -38,7 +21,7 @@ func TestUnmarshalViperWithNotTaggedFields(t *testing.T) {
 	}
 
 	var actual mycfg
-	unmarshal(&actual)
+	UnmarshalViper(&actual)
 
 	expected := mycfg{
 		Broker:    "1.2.3.4",
