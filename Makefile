@@ -3,12 +3,15 @@ BIN_PATH ?= "./bin/${CMD_NAME}"
 PKGS = $(shell go list ./...)
 TEST_PKGS=$(shell go list ./pkg/... 2> /dev/null)
 
-build:
-	@go mod tidy
+build: tidy
 	@echo ">> Building ${BIN_PATH}"
 	@go build -o $(BIN_PATH)
 	@echo ">> Done"
 	@echo ""
+
+tidy:
+	@echo ">> Sanitizing..."
+	@go mod tidy
 
 pkgs:
 	@for word in ${PKGS}; do\
@@ -27,7 +30,7 @@ lint:
 	@echo ">> Linting..."
 	@golint $(PKGS)
 
-test:
+test: tidy
 	@echo ">> Running tests..."
 	@go test -v -race ${TEST_PKGS}
 
