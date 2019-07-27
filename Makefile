@@ -25,6 +25,6 @@ lint:
 
 test:
 	@echo ">> Running tests..."
-	@go test -v ${TEST_PKGS}
+	@go test -v -race ${TEST_PKGS}
 
 .PHONY: build test
