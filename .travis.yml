@@ -1,5 +1,9 @@
 language: go
 
+# Force-enable Go modules, it will be unnecessary on Go 1.13+
+env:
+  - GO111MODULE=on
+
 go:
   - 1.12.x
 
