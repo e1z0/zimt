@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/viper"
 
+	"github.com/radiohive/zimt/pkg/strings"
 	"github.com/radiohive/zimt/pkg/structs"
 )
 
@@ -51,7 +52,11 @@ func report(arg interface{}) {
 		case reflect.Int:
 			fmt.Printf("%s=%d\n", tag, f.Value.Int())
 		case reflect.String:
-			fmt.Printf("%s=%q\n", tag, f.Value.String())
+			if f.Tag("print") == "mask" {
+				fmt.Printf("%s=%q\n", tag, strings.Mask(f.Value.String()))
+			} else {
+				fmt.Printf("%s=%q\n", tag, f.Value.String())
+			}
 		case reflect.Bool:
 			fmt.Printf("%s=%t\n", tag, f.Value.Bool())
 		}

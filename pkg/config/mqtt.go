@@ -10,7 +10,7 @@ type MqttConfig struct {
 	Port      int    `viper:"mqtt.port"`
 	BaseTopic string `viper:"mqtt.base-topic"`
 	User      string `viper:"mqtt.user"`
-	Password  string `viper:"mqtt.password"`
+	Password  string `viper:"mqtt.password" print:"mask"`
 	ClientID  string `viper:"mqtt.client-id"`
 }
 
