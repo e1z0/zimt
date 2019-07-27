@@ -31,4 +31,7 @@ test:
 	@echo ">> Running tests..."
 	@go test -v -race ${TEST_PKGS}
 
+setup-ci:
+	@go get -u golang.org/x/lint/golint
+
 .PHONY: build test

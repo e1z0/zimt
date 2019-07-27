@@ -12,6 +12,7 @@ notifications:
   email: false
 
 script:
+  - make setup-ci
   - make lint
   - make vet
   - make test
