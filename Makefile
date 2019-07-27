@@ -16,11 +16,15 @@ pkgs:
 	done
 
 format:
-	@echo ">> Formatting codebase..."
+	@echo ">> Formatting..."
 	@go fmt $(PKGS)
 
+vet:
+	@echo ">> Vetting..."
+	@go vet ${PKGS}
+
 lint:
-	@echo ">> Linting codebase..."
+	@echo ">> Linting..."
 	@golint $(PKGS)
 
 test:
