@@ -2,6 +2,8 @@ package config
 
 import (
 	"github.com/spf13/viper"
+
+	"github.com/radiohive/zimt/pkg/structs"
 )
 
 // MqttConfig represents mqtt connection options
@@ -10,19 +12,19 @@ type MqttConfig struct {
 	Port      int    `viper:"mqtt.port"`
 	BaseTopic string `viper:"mqtt.base-topic"`
 	User      string `viper:"mqtt.user"`
-	Password  string `viper:"mqtt.password"`
+	Password  string `viper:"mqtt.password" print:"mask"`
 	ClientID  string `viper:"mqtt.client-id"`
 }
 
 // Print prints mqtt config to standard output
 func (mc MqttConfig) Print() {
-	report(&mc)
+	structs.Print(&mc, "viper")
 }
 
 // NewMqttConfig returns new value of mqtt config
 func NewMqttConfig() MqttConfig {
 	var mqtt MqttConfig
-	unmarshal(&mqtt)
+	structs.UnmarshalViper(&mqtt)
 	return mqtt
 }
 

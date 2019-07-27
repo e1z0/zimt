@@ -1,12 +1,14 @@
-package config
+package structs
 
 import (
 	"reflect"
 	"testing"
+
+	"github.com/radiohive/zimt/pkg/config"
 )
 
-func TestUnmarshalWithDefaultConfig(t *testing.T) {
-	Load("../../test/config.yaml")
+func TestUnmarshalViperWithDefaultConfig(t *testing.T) {
+	config.Load("../../test/config.yaml")
 
 	var actual MqttConfig
 	unmarshal(&actual)
@@ -25,8 +27,8 @@ func TestUnmarshalWithDefaultConfig(t *testing.T) {
 	}
 }
 
-func TestUnmarshalWithNotTaggedFields(t *testing.T) {
-	Load("../../test/config.yaml")
+func TestUnmarshalViperWithNotTaggedFields(t *testing.T) {
+	config.Load("../../test/config.yaml")
 
 	type mycfg struct {
 		Broker    string `viper:"mqtt.broker"`
