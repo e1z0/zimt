@@ -11,6 +11,12 @@ go:
 git:
   depth: 1
 
+# whitelist only master and release for branch builds
+branches:
+  only:
+  - master
+  - release
+
 # Don't email me the results of the test runs.
 notifications:
   email: false
