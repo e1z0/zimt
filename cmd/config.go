@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 
@@ -22,7 +23,7 @@ var configCmd = &cobra.Command{
 
 		fmt.Println("==> Remote bridge configuration:")
 		client := mqtt.NewClient()
-		api.GetBridgeConfig(client).Print()
+		api.GetBridgeConfig(client).Print(os.Stdout)
 		client.Disconnect(50)
 	},
 }

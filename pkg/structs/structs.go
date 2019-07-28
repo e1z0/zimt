@@ -2,6 +2,7 @@ package structs
 
 import (
 	"fmt"
+	"io"
 	"reflect"
 
 	"github.com/spf13/viper"
@@ -74,8 +75,8 @@ func UnmarshalViper(arg interface{}) {
 	}
 }
 
-// Print prints the config fields and values to the standard output
-func Print(arg interface{}, tag string) {
+// Print writes the config fields and values to the
+func Print(arg interface{}, tag string, writer io.Writer) {
 	fields := ExtractFields(arg)
 
 	if len(fields) == 0 {
@@ -83,21 +84,24 @@ func Print(arg interface{}, tag string) {
 	}
 
 	for _, f := range fields {
+		if f.Tag("print") == "-" {
+			continue
+		}
 		t := f.Tag(tag)
 		if t == "" {
-			continue
+			t = f.Field.Name
 		}
 		switch f.Value.Kind() {
 		case reflect.Int:
-			fmt.Printf("%s=%d\n", t, f.Value.Int())
+			writer.Write([]byte(fmt.Sprintf("%s=%d\n", t, f.Value.Int())))
 		case reflect.String:
 			if f.Tag("print") == "mask" {
-				fmt.Printf("%s=%q\n", t, strings.Mask(f.Value.String()))
+				writer.Write([]byte(fmt.Sprintf("%s=%q\n", t, strings.Mask(f.Value.String()))))
 			} else {
-				fmt.Printf("%s=%q\n", t, f.Value.String())
+				writer.Write([]byte(fmt.Sprintf("%s=%q\n", t, f.Value.String())))
 			}
 		case reflect.Bool:
-			fmt.Printf("%s=%t\n", t, f.Value.Bool())
+			writer.Write([]byte(fmt.Sprintf("%s=%t\n", t, f.Value.Bool())))
 		}
 	}
 }
