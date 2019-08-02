@@ -8,7 +8,34 @@
 
 ## Configuration
 
-    @TODO
+Configuration file is optional, `zimt` will use its default values for the options in case file is missing
+
+Configuration file is expected to be found either at default location: `~/.zimt.yaml` or specified with `--config` flag.
+
+It might be useful to check the [configuration file example](./docs/.zimt.yaml.example).
+
+The configuration options are:
+
+```yaml
+mqtt:
+  # the broker host, optional, by defaut set to `localhost`
+  broker: localhost
+
+  # the broker port, optional, by default set to `1883`
+  port: 1883
+
+  # zigbee2mqtt basic topic, optional, by default set to `zigbee2mqtt`
+  base-topic: zigbee2mqtt
+
+  # broker auth user, optional, zimt doesn't send it to the broker if missing
+  user: <mqtt-user>
+
+  # broker auth password, optional, zimt doesn't send it to the broker if missing
+  password: <mqtt-password>
+
+  # client idendifier visible in connection list, optional, by default set to `zimt`
+  client-id: zimt
+```
 
 ## Usage
 
