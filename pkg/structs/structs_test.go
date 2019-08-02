@@ -72,3 +72,33 @@ AccountID="my-account-id"
 		t.Errorf("Expected %+v, got %+v", expected, actual.String())
 	}
 }
+
+func TestTitlesWithStructValuePointer(t *testing.T) {
+	type mycfg struct {
+		Broker    string `my:"br"`
+		Port      int    `my:"port"`
+		User      string `my:"u"`
+		AccountID string
+	}
+
+	actual, _ := Titles(&mycfg{}, "my", []string{})
+	expected := []string{"br", "port", "u", "AccountID"}
+	if !reflect.DeepEqual(expected, actual) {
+		t.Errorf("Expected %+v, got %+v", expected, actual)
+	}
+}
+
+func TestTitlesWithStructValue(t *testing.T) {
+	type mycfg struct {
+		Broker    string `my:"br"`
+		Port      int    `my:"port"`
+		User      string `my:"u"`
+		AccountID string
+	}
+
+	actual, _ := Titles(mycfg{}, "my", []string{"Broker", "AccountID", "AccountStatus"})
+	expected := []string{"br", "AccountID", ""}
+	if !reflect.DeepEqual(expected, actual) {
+		t.Errorf("Expected %+v, got %+v", expected, actual)
+	}
+}

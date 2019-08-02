@@ -11,7 +11,7 @@ import (
 	"github.com/radiohive/zimt/pkg/mqtt"
 )
 
-// configCmd represents the config command
+// configCmd implements the `config` command
 var configCmd = &cobra.Command{
 	Use:   "config",
 	Short: "Prints zimt configuration",

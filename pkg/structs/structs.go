@@ -22,38 +22,48 @@ func (f Field) Tag(name string) string {
 }
 
 // ExtractFields return slice of struct's fields
-func ExtractFields(arg interface{}) (fields []Field) {
+func ExtractFields(arg interface{}, filters []string) ([]Field, error) {
+	fields := make([]Field, 0)
 	v := reflect.ValueOf(arg)
 	t := reflect.TypeOf(arg)
 
-	if v.Kind() != reflect.Ptr {
-		return fields
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+		t = t.Elem()
 	}
 
-	sv := v.Elem()
-	st := t.Elem()
-	if sv.Kind() != reflect.Struct {
-		return fields
+	if v.Kind() != reflect.Struct {
+		return fields, fmt.Errorf("%T is expected to be of type Struct or *Struct", arg)
 	}
 
-	for i := 0; i < sv.NumField(); i++ {
-		fv := sv.Field(i)
-		if !fv.IsValid() {
-			continue
+	if len(filters) > 0 {
+		for _, n := range filters {
+			ft, found := t.FieldByName(n)
+			if !found {
+				fields = append(fields, Field{})
+				continue
+			}
+			fields = append(fields, Field{
+				Value: v.FieldByName(n),
+				Field: ft,
+			})
 		}
+		return fields, nil
+	}
+
+	for i := 0; i < v.NumField(); i++ {
 		fields = append(fields, Field{
-			Value: fv,
-			Field: st.Field(i),
+			Value: v.Field(i),
+			Field: t.Field(i),
 		})
 	}
-
-	return fields
+	return fields, nil
 }
 
 // UnmarshalViper initializes config struct with viper values,
 // the struct fields are expected to have `viper` tags
 func UnmarshalViper(arg interface{}) {
-	fields := ExtractFields(arg)
+	fields, _ := ExtractFields(arg, nil)
 
 	if len(fields) == 0 {
 		return
@@ -77,7 +87,7 @@ func UnmarshalViper(arg interface{}) {
 
 // Print writes the config fields and values to the
 func Print(arg interface{}, tag string, writer io.Writer) {
-	fields := ExtractFields(arg)
+	fields, _ := ExtractFields(arg, nil)
 
 	if len(fields) == 0 {
 		return
@@ -104,4 +114,28 @@ func Print(arg interface{}, tag string, writer io.Writer) {
 			writer.Write([]byte(fmt.Sprintf("%s=%t\n", t, f.Value.Bool())))
 		}
 	}
+}
+
+// Titles return printable struct's field titles
+func Titles(arg interface{}, tag string, filters []string) ([]string, error) {
+	s := []string{}
+	fields, err := ExtractFields(arg, filters)
+	if err != nil {
+		return s, err
+	}
+	if len(fields) == 0 {
+		return s, nil
+	}
+
+	for _, f := range fields {
+		title := f.Field.Name
+		if tag != "" {
+			if t := f.Tag(tag); t != "" {
+				title = t
+			}
+		}
+		s = append(s, title)
+	}
+
+	return s, nil
 }
