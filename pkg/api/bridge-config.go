@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"io"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/radiohive/zimt/pkg/structs"
@@ -17,8 +18,8 @@ type BridgeConfig struct {
 }
 
 // Print prints bridge config to standard output
-func (bc BridgeConfig) Print() {
-	structs.Print(&bc, "json")
+func (bc BridgeConfig) Print(writer io.Writer) {
+	structs.Print(&bc, "json", writer)
 }
 
 // GetBridgeConfig subscribes and returns message  from `#/bridge/config` topic

@@ -2,6 +2,7 @@ package structs
 
 import (
 	"fmt"
+	"io"
 	"reflect"
 
 	"github.com/spf13/viper"
@@ -21,38 +22,48 @@ func (f Field) Tag(name string) string {
 }
 
 // ExtractFields return slice of struct's fields
-func ExtractFields(arg interface{}) (fields []Field) {
+func ExtractFields(arg interface{}, filters []string) ([]Field, error) {
+	fields := make([]Field, 0)
 	v := reflect.ValueOf(arg)
 	t := reflect.TypeOf(arg)
 
-	if v.Kind() != reflect.Ptr {
-		return fields
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+		t = t.Elem()
 	}
 
-	sv := v.Elem()
-	st := t.Elem()
-	if sv.Kind() != reflect.Struct {
-		return fields
+	if v.Kind() != reflect.Struct {
+		return fields, fmt.Errorf("%T is expected to be of type Struct or *Struct", arg)
 	}
 
-	for i := 0; i < sv.NumField(); i++ {
-		fv := sv.Field(i)
-		if !fv.IsValid() {
-			continue
+	if len(filters) > 0 {
+		for _, n := range filters {
+			ft, found := t.FieldByName(n)
+			if !found {
+				fields = append(fields, Field{})
+				continue
+			}
+			fields = append(fields, Field{
+				Value: v.FieldByName(n),
+				Field: ft,
+			})
 		}
+		return fields, nil
+	}
+
+	for i := 0; i < v.NumField(); i++ {
 		fields = append(fields, Field{
-			Value: fv,
-			Field: st.Field(i),
+			Value: v.Field(i),
+			Field: t.Field(i),
 		})
 	}
-
-	return fields
+	return fields, nil
 }
 
 // UnmarshalViper initializes config struct with viper values,
 // the struct fields are expected to have `viper` tags
 func UnmarshalViper(arg interface{}) {
-	fields := ExtractFields(arg)
+	fields, _ := ExtractFields(arg, nil)
 
 	if len(fields) == 0 {
 		return
@@ -74,30 +85,57 @@ func UnmarshalViper(arg interface{}) {
 	}
 }
 
-// Print prints the config fields and values to the standard output
-func Print(arg interface{}, tag string) {
-	fields := ExtractFields(arg)
+// Print writes the config fields and values to the
+func Print(arg interface{}, tag string, writer io.Writer) {
+	fields, _ := ExtractFields(arg, nil)
 
 	if len(fields) == 0 {
 		return
 	}
 
 	for _, f := range fields {
+		if f.Tag("print") == "-" {
+			continue
+		}
 		t := f.Tag(tag)
 		if t == "" {
-			continue
+			t = f.Field.Name
 		}
 		switch f.Value.Kind() {
 		case reflect.Int:
-			fmt.Printf("%s=%d\n", t, f.Value.Int())
+			writer.Write([]byte(fmt.Sprintf("%s=%d\n", t, f.Value.Int())))
 		case reflect.String:
 			if f.Tag("print") == "mask" {
-				fmt.Printf("%s=%q\n", t, strings.Mask(f.Value.String()))
+				writer.Write([]byte(fmt.Sprintf("%s=%q\n", t, strings.Mask(f.Value.String()))))
 			} else {
-				fmt.Printf("%s=%q\n", t, f.Value.String())
+				writer.Write([]byte(fmt.Sprintf("%s=%q\n", t, f.Value.String())))
 			}
 		case reflect.Bool:
-			fmt.Printf("%s=%t\n", t, f.Value.Bool())
+			writer.Write([]byte(fmt.Sprintf("%s=%t\n", t, f.Value.Bool())))
 		}
 	}
+}
+
+// Titles return printable struct's field titles
+func Titles(arg interface{}, tag string, filters []string) ([]string, error) {
+	s := []string{}
+	fields, err := ExtractFields(arg, filters)
+	if err != nil {
+		return s, err
+	}
+	if len(fields) == 0 {
+		return s, nil
+	}
+
+	for _, f := range fields {
+		title := f.Field.Name
+		if tag != "" {
+			if t := f.Tag(tag); t != "" {
+				title = t
+			}
+		}
+		s = append(s, title)
+	}
+
+	return s, nil
 }

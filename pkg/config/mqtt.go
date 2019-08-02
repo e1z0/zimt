@@ -1,6 +1,8 @@
 package config
 
 import (
+	"os"
+
 	"github.com/spf13/viper"
 
 	"github.com/radiohive/zimt/pkg/structs"
@@ -18,7 +20,7 @@ type MqttConfig struct {
 
 // Print prints mqtt config to standard output
 func (mc MqttConfig) Print() {
-	structs.Print(&mc, "viper")
+	structs.Print(&mc, "viper", os.Stdout)
 }
 
 // NewMqttConfig returns new value of mqtt config
