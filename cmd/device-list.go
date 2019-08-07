@@ -18,7 +18,7 @@ var deviceListCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client := mqtt.NewClient()
 		devices := api.GetBridgeConfigDevices(client)
-		client.Disconnect(50)
+		defer client.Disconnect(0)
 
 		table := tablewriter.NewWriter(os.Stdout)
 		table.SetAutoFormatHeaders(false)
