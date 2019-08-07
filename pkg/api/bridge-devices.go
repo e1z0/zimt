@@ -2,10 +2,8 @@ package api
 
 import (
 	"encoding/json"
-	// "io"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
-	// "github.com/radiohive/zimt/pkg/structs"
 )
 
 // BridgeConfigDevice represents message of `#/bridge/config/devices`
@@ -23,13 +21,6 @@ type BridgeConfigDevice struct {
 	SWBuildID    string `json:"swBuildId"`
 	DateCode     string `json:"dateCode"`
 }
-
-// Print prints bridge config to standard output
-// func (bc BridgeConfigDevice) PrintTable(writer io.Writer) {
-// func (bc BridgeConfigDevice) PrintTable(writer io.Writer) {
-// titles :=
-// structs.Print(&bc, "json")
-// }
 
 // GetBridgeConfigDevices subscribes and returns message  from `#/bridge/config/devices` topic
 func GetBridgeConfigDevices(client mqtt.Client) []BridgeConfigDevice {
