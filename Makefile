@@ -40,6 +40,8 @@ test: tidy
 	@echo ">> Running tests..."
 	@go test -v -race ${TEST_PKGS}
 
+ci: lint vet test
+
 setup-ci:
 	@go get -u golang.org/x/lint/golint
 
