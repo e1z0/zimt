@@ -45,6 +45,7 @@ setup-ci:
 	@go get -u golang.org/x/lint/golint
 
 dist:
+	@ rm -rf ./dist
 	@- $(foreach p,$(PLATFORMS), \
 		build/scripts/dist.sh $(p); \
 	)
