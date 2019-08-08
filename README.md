@@ -39,7 +39,47 @@ mqtt:
 
 ## Usage
 
-    @TODO
+`zimt` is a CLI tool to manage your zigbee connected devices via [zigbee2mqtt bridge](https://github.com/Koenkk/zigbee2mqtt).
+
+### Synopsis
+
+    zimt [flags] <command> <subcommand> [parameters]
+
+### Flags
+
+    --help
+
+Print help information
+
+    --verbose
+
+Turn on verbose/debug logging
+
+    --config /path/to/config/file
+
+Take configuration file from not default location
+
+### Commands
+
+    zimt bridge
+
+Prints bridge version
+
+    zimt broker
+
+Prints broker details
+
+    zimt config
+
+Prints zimt configuration
+
+    zimt device list
+
+Prints all connected devices
+
+    zimt version
+
+Prints zimt version and build information
 
 ## License
 
