@@ -17,9 +17,10 @@ module=$(awk '/module/{print $2}' go.mod)
 buildmeta="${module}/pkg/buildmeta"
 
 echo "Buidling ${out}..."
-GOOS=${os} GOARCH=${arch} go build -o ${out} -ldflags "\
+CGO_ENABLED=0 GOOS=${os} GOARCH=${arch} go build -o ${out} -ldflags "\
     -X '${buildmeta}.GitTag=$(git describe --abbrev=0)' \
     -X '${buildmeta}.GitCommit=$(git rev-parse --verify --short HEAD)' \
     -X '${buildmeta}.GitBranch=$(git symbolic-ref --short -q HEAD)' \
     -X '${buildmeta}.BuildDate=$(date -u +"%Y-%m-%dT%H:%M:%SZ")' \
-    -X '${buildmeta}.Platform=${platform}'"
+    -X '${buildmeta}.Platform=${platform}' \
+    -extldflags '-static'"
