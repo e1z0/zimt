@@ -61,3 +61,7 @@ func topic(path string) string {
 	c := config.NewMqttConfig()
 	return fmt.Sprintf("%s/%s", c.BaseTopic, path)
 }
+
+func systopic(path string) string {
+	return fmt.Sprintf("$SYS/broker/%s", path)
+}
