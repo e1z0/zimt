@@ -17,6 +17,7 @@ func getSubscribedOnce(c mqtt.Client, t string) mqtt.Message {
 	case <-time.After(5 * time.Second):
 		panic("timeout: can't get message over 5 seconds")
 	}
+	c.Unsubscribe(t)
 	return <-resp
 }
 

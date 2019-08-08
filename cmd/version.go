@@ -12,7 +12,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Prints zimt version and build information",
 	Run: func(cmd *cobra.Command, args []string) {
-		f := "%-11v%s\n"
+		f := "%-11v%v\n"
 		fmt.Printf(f, "GitTag:", buildmeta.GitTag)
 		fmt.Printf(f, "GitCommit:", buildmeta.GitCommit)
 		fmt.Printf(f, "GitBranch:", buildmeta.GitBranch)

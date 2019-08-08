@@ -6,7 +6,6 @@ TEST_PKGS=$(shell go list ./pkg/... 2> /dev/null)
 PLATFORMS := \
 	linux/386 \
 	linux/amd64 \
-	darwin/386 \
 	darwin/amd64
 
 build: tidy
@@ -46,6 +45,7 @@ setup-ci:
 	@go get -u golang.org/x/lint/golint
 
 dist:
+	@ rm -rf ./dist
 	@- $(foreach p,$(PLATFORMS), \
 		build/scripts/dist.sh $(p); \
 	)
