@@ -103,15 +103,15 @@ func Print(arg interface{}, tag string, writer io.Writer) {
 		}
 		switch f.Value.Kind() {
 		case reflect.Int:
-			writer.Write([]byte(fmt.Sprintf("%s=%d\n", t, f.Value.Int())))
+			writer.Write([]byte(fmt.Sprintf("%s=%d\n", t, f.Value.Int()))) // #nosec
 		case reflect.String:
 			if f.Tag("print") == "mask" {
-				writer.Write([]byte(fmt.Sprintf("%s=%q\n", t, strings.Mask(f.Value.String()))))
+				writer.Write([]byte(fmt.Sprintf("%s=%q\n", t, strings.Mask(f.Value.String())))) // #nosec
 			} else {
-				writer.Write([]byte(fmt.Sprintf("%s=%q\n", t, f.Value.String())))
+				writer.Write([]byte(fmt.Sprintf("%s=%q\n", t, f.Value.String()))) // #nosec
 			}
 		case reflect.Bool:
-			writer.Write([]byte(fmt.Sprintf("%s=%t\n", t, f.Value.Bool())))
+			writer.Write([]byte(fmt.Sprintf("%s=%t\n", t, f.Value.Bool()))) // #nosec
 		}
 	}
 }

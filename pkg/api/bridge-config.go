@@ -20,6 +20,8 @@ func GetBridgeConfig(client mqtt.Client) BridgeConfig {
 	topic := topic("bridge/config")
 	msg := getSubscribedOnce(client, topic)
 	config := BridgeConfig{}
-	json.Unmarshal(msg.Payload(), &config)
+	if err := json.Unmarshal(msg.Payload(), &config); err != nil {
+		panic(err)
+	}
 	return config
 }
