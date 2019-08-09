@@ -4,7 +4,6 @@ PKGS = $(shell go list ./...)
 TEST_PKGS=$(shell go list ./pkg/... 2> /dev/null)
 
 PLATFORMS := \
-	linux/386 \
 	linux/amd64 \
 	darwin/amd64
 
