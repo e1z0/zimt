@@ -4,7 +4,8 @@
 
 ## Installation
 
-    @TODO
+    brew tap radiohive/zimt
+    brew install zimt
 
 ## Configuration
 
