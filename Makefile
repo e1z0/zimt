@@ -34,14 +34,19 @@ lint:
 	@echo ">> Linting..."
 	@golint $(PKGS)
 
+sec:
+	@echo ">> Running security audit..."
+	@gosec -quiet ./...
+
 test: tidy
 	@echo ">> Running tests..."
 	@go test -v -race ${TEST_PKGS}
 
-ci: lint vet test
+ci: lint vet sec test
 
 setup-ci:
 	@go get -u golang.org/x/lint/golint
+	@go get -u github.com/securego/gosec/cmd/gosec
 
 dist:
 	@ rm -rf ./dist

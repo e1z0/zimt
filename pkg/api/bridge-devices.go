@@ -28,6 +28,8 @@ func GetBridgeConfigDevices(client mqtt.Client) []BridgeConfigDevice {
 	pubTopic := topic("bridge/config/devices/get")
 	msg := getSubscribedOnPublishOnce(client, subTopic, pubTopic, "")
 	devices := []BridgeConfigDevice{}
-	json.Unmarshal(msg.Payload(), &devices)
+	if err := json.Unmarshal(msg.Payload(), &devices); err != nil {
+		panic(err)
+	}
 	return devices
 }
