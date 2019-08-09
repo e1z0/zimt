@@ -11,12 +11,14 @@ fi
 platform_parts=(${platform//\// })
 os=${platform_parts[0]}
 arch=${platform_parts[1]}
-out="dist/zimt_${os}_${arch}"
+bin="zimt_${os}_${arch}"
+out="dist/${bin}"
 
 module=$(awk '/module/{print $2}' go.mod)
 buildmeta="${module}/pkg/buildmeta"
 
-echo -ne "Buidling ${out}..."
+echo "${out}:"
+echo -ne "  Buidling..."
 CGO_ENABLED=0 GOOS=${os} GOARCH=${arch} go build -o ${out} -ldflags "\
     -X '${buildmeta}.GitTag=$(git describe --abbrev=0)' \
     -X '${buildmeta}.GitCommit=$(git rev-parse --verify --short HEAD)' \
@@ -26,7 +28,10 @@ CGO_ENABLED=0 GOOS=${os} GOARCH=${arch} go build -o ${out} -ldflags "\
     -extldflags '-static'"
 echo -ne " ✔\n"
 
-echo -ne "Compressing ${out}..."
-upx_out=$(upx ${out} -qq)
+echo -ne "  Compressing..."
+cd dist && tar -cvzf ${bin}.tar.gz ${bin} > /dev/null 2>&1 && rm ${bin} && cd ..
 echo -ne " ✔\n"
-echo "  " ${upx_out} | cut -d " " -f1-7
+
+echo -ne "  Calculating sha256..."
+echo $(gsha256sum "${out}.tar.gz") | cut -d " " -f1 > "${out}tar.gz.sha256"
+echo -ne " ✔\n"
