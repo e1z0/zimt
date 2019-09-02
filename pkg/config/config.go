@@ -16,15 +16,14 @@ func Load(cfgFile string) {
 		viper.SetConfigFile(cfgFile)
 	} else {
 		// Find home directory.
-		home, err := homedir.Dir()
+		cfgDir, err := homedir.Expand("~/.config/zimt")
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".zimt" (without extension).
-		viper.AddConfigPath(home)
-		viper.SetConfigName(".zimt")
+		viper.AddConfigPath(cfgDir) // path to look for the config file in
+		viper.SetConfigName("zimt") // name of config file (without extension)
 	}
 
 	// flag "my-key" matches with "MY_KEY" environment variable

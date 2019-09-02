@@ -42,7 +42,7 @@ func init() {
 		config.Load(cfgFile)
 	})
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.zimt.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.config/zimt/zimt.yaml)")
 
 	rootCmd.PersistentFlags().BoolVarP(&isVerbose, "verbose", "", false, "verbose output")
 	if err := viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose")); err != nil {
