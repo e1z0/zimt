@@ -11,7 +11,7 @@
 
 Configuration file is optional, `zimt` will use its default values for the options in case file is missing
 
-Configuration file is expected to be found either at default location: `~/.zimt.yaml` or specified with `--config` flag.
+Configuration file is expected to be found either at default location: `~/.config/zimt/zimt.yaml` or specified with `--config` flag.
 
 It might be useful to check the [configuration file example](./docs/.zimt.yaml.example).
 
