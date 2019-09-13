@@ -1,0 +1,20 @@
+name: Go CI Workflow
+on: [push]
+jobs:
+
+  ci:
+    name: Run CI on Go ${{ matrix.go }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: [1.11, 1.12]
+    steps:
+
+    - uses: actions/checkout@master
+
+    - uses: actions/setup-go@v1
+      with:
+        go-version: ${{ matrix.go }}
+
+    - name: Lint & Test
+      run: export PATH=${PATH}:$(go env GOPATH)/bin && make setup-ci ci
