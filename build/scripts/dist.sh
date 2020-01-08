@@ -19,5 +19,5 @@ cd dist && tar -cvzf ${BUILD_BIN}.tar.gz ${BUILD_BIN} > /dev/null 2>&1 && cd ..
 echo -ne " ✔\n"
 
 echo -ne "  Calculating sha256..."
-echo $(gsha256sum "${BUILD_OUT}.tar.gz") | cut -d " " -f1 > "${BUILD_OUT}tar.gz.sha256"
+echo $(gsha256sum "${BUILD_OUT}.tar.gz") | cut -d " " -f1 > "${BUILD_OUT}.tar.gz.sha256"
 echo -ne " ✔\n"
