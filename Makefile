@@ -49,7 +49,7 @@ setup-ci:
 	@go get -u github.com/securego/gosec/cmd/gosec
 
 dist:
-	@ rm -rf ./dist
+	@rm -rf ./dist
 	@- $(foreach p,$(PLATFORMS), \
 		build/scripts/dist.sh $(p); \
 	)
