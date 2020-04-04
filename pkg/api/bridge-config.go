@@ -10,9 +10,19 @@ import (
 type BridgeConfig struct {
 	Version     string `json:"version"`
 	Commit      string `json:"commit"`
-	Coordinator int    `json:"coordinator"`
-	LogLevel    string `json:"log_level"`
-	PermitJoin  bool   `json:"permit_join"`
+	Coordinator struct {
+		Type string `json:"type"`
+		Meta struct {
+			TransportRev int `json:"transportrev"`
+			Product      int `json:"product"`
+			MajorRel     int `json:"majorrel"`
+			MinorRel     int `json:"minorrel"`
+			MaintRel     int `json:"maintrel"`
+			Revision     int `json:"revision"`
+		} `json:"meta"`
+	} `json:"coordinator"`
+	LogLevel   string `json:"log_level"`
+	PermitJoin bool   `json:"permit_join"`
 }
 
 // GetBridgeConfig subscribes and returns message  from `#/bridge/config` topic
